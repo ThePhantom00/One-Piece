@@ -1,37 +1,64 @@
-## Welcome to GitHub Pages
+		
+<?php
 
-You can use the [editor on GitHub](https://github.com/ThePhantom00/One-Piece/edit/gh-pages/index.md) to maintain and preview the content for your website in Markdown files.
+/*
 
-Whenever you commit to this repository, GitHub Pages will run [Jekyll](https://jekyllrb.com/) to rebuild the pages in your site, from the content in your Markdown files.
+	Author: Amro Eldewiny
+	URI: http://arabic-html.com
 
-### Markdown
+*/
+if(isset($_FILES['image'])){
+		$errors= array();
+		$file_name = $_FILES['image']['name'];
+		$file_size = $_FILES['image']['size'];
+		$file_tmp = $_FILES['image']['tmp_name'];
+		$file_type = $_FILES['image']['type'];   
+		$extension=explode('.',$file_name); 
+    	$file_ext=strtolower(end($extension));
+		
+		$expensions= array("jpeg","jpg","png","gif","pdf","docx"); 		
+		if(in_array($file_ext,$expensions) === false){
+			$errors[]='<p>لا يمكن رفع هذا الملف</p>';
+		}
+		if($file_size > 2097152){
+		$errors[]='<p>يرجو ان يكون حجم الفايل لا يزيد عن 2 MB</p>';
+		}				
+		if(empty($errors)){
+			if(move_uploaded_file($file_tmp,"images/".$file_name)) {
+				echo '<p>تم رفع الملف</p>';
+			}
+		}else{
+			foreach ($errors as $error) {
+				echo $error;
+			}
+		}
+	}
 
-Markdown is a lightweight and easy-to-use syntax for styling your writing. It includes conventions for
 
-```markdown
-Syntax highlighted code block
+?>
 
-# Header 1
-## Header 2
-### Header 3
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>Arabic HTML Files Upload</title>
+		<link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/3.9.0/build/cssreset/cssreset-min.css">
+		<link href='http://fonts.googleapis.com/css?family=Lobster' rel='stylesheet' type='text/css'>
+		<link rel="stylesheet" type="text/css" href="style.css">	
+	</head>
 
-- Bulleted
-- List
+	<body>
+		<div class="page">
+			<h1>Arabic HTML Files Upload</h1>
 
-1. Numbered
-2. List
-
-**Bold** and _Italic_ and `Code` text
-
-[Link](url) and ![Image](src)
-```
-
-For more details see [GitHub Flavored Markdown](https://guides.github.com/features/mastering-markdown/).
-
-### Jekyll Themes
-
-Your Pages site will use the layout and styles from the Jekyll theme you have selected in your [repository settings](https://github.com/ThePhantom00/One-Piece/settings/pages). The name of this theme is saved in the Jekyll `_config.yml` configuration file.
-
-### Support or Contact
-
-Having trouble with Pages? Check out our [documentation](https://docs.github.com/categories/github-pages-basics/) or [contact support](https://support.github.com/contact) and we’ll help you sort it out.
+			<div class="upload">
+				<form action="" method="POST" enctype="multipart/form-data"> 
+					<input type="file" class="button" name="image" />
+					<input type="submit" class="btn" />
+				</form>
+			</div>
+			
+		</div> <!-- End page -->
+		<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+	</body>
+</html>
